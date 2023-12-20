@@ -16,14 +16,36 @@
     config.categoryOptions =
         AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP;
 
+    
     [session lockForConfiguration];
     NSError* error = nil;
+    
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    // config.category = AVAudioSessionCategoryPlayback;
+    config.category = AVAudioSessionCategoryPlayAndRecord;
+    
+    // config.mode = AVAudioSessionModeVoiceChat;
+    config.mode = AVAudioSessionModeVideoChat;
+
+    // config.categoryOptions = AVAudioSessionCategoryOptionDefaultToSpeaker;
+    config.categoryOptions = nil;
+
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////
+    
     bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
+    // bool success = [session setCategory:config.category withOptions:config.categoryOptions error:&error];
+    NSLog(@"xxxxxxx AVAudio setCategory: %@", config.category);
+    NSLog(@"xxxxxxx AVAudio categoryOptions: %@", config.categoryOptions);
     if (!success)
-      NSLog(@"ensureAudioSessionWithRecording[true]: setCategory failed due to: %@", error);
+      NSLog(@"ensureAudioSessionWithRecording[true]: AVAudio setCategory failed due to: %@", error);
+    
     success = [session setMode:config.mode error:&error];
+    NSLog(@"xxxxxxx AVAudio setMode: %@", config.mode);
     if (!success)
-      NSLog(@"ensureAudioSessionWithRecording[true]: setMode failed due to: %@", error);
+      NSLog(@"ensureAudioSessionWithRecording[true]: AVAudio setMode failed due to: %@", error);
     [session unlockForConfiguration];
   } else if (!recording && (session.category == AVAudioSessionCategoryAmbient ||
                             session.category == AVAudioSessionCategorySoloAmbient)) {
@@ -33,6 +55,14 @@
     bool success = [session setMode:config.mode error:&error];
     if (!success)
       NSLog(@"ensureAudioSessionWithRecording[false]: setMode failed due to: %@", error);
+
+    /////////////////////////////////////////////////
+    /////////////////////////////////////////////////
+    session.useManualAudio = true;
+    // session.isAudioEnabled = false;
+    /////////////////////////////////////////////////
+    /////////////////////////////////////////////////
+
     [session unlockForConfiguration];
   }
 }
