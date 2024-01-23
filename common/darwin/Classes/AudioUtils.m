@@ -28,7 +28,7 @@
     // config.mode = AVAudioSessionModeVoiceChat;
     config.mode = AVAudioSessionModeVideoChat;
 
-    // config.categoryOptions = AVAudioSessionCategoryOptionDefaultToSpeaker;
+    config.categoryOptions = AVAudioSessionCategoryOptionDefaultToSpeaker;
     config.categoryOptions = nil;
 
     ////////////////////////////////////////////////////
