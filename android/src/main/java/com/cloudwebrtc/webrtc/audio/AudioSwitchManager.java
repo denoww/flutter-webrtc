@@ -211,16 +211,15 @@ public class AudioSwitchManager {
 
     private void updatePreferredDeviceList(boolean speakerOn) {
         preferredDeviceList = new ArrayList<>();
-        // preferredDeviceList.add(AudioDevice.BluetoothHeadset.class);
-        // preferredDeviceList.add(AudioDevice.WiredHeadset.class);
-        preferredDeviceList.add(AudioDevice.Speakerphone.class);
-        // if (speakerOn) {
-        //     preferredDeviceList.add(AudioDevice.Speakerphone.class);
-        //     preferredDeviceList.add(AudioDevice.Earpiece.class);
-        // } else {
-        //     preferredDeviceList.add(AudioDevice.Earpiece.class);
-        //     preferredDeviceList.add(AudioDevice.Speakerphone.class);
-        // }
+        preferredDeviceList.add(AudioDevice.BluetoothHeadset.class);
+        preferredDeviceList.add(AudioDevice.WiredHeadset.class);
+        if (speakerOn) {
+            preferredDeviceList.add(AudioDevice.Speakerphone.class);
+            preferredDeviceList.add(AudioDevice.Earpiece.class);
+        } else {
+            preferredDeviceList.add(AudioDevice.Earpiece.class);
+            preferredDeviceList.add(AudioDevice.Speakerphone.class);
+        }
         handler.post(() -> {
             Objects.requireNonNull(audioSwitch).setPreferredDeviceList(preferredDeviceList);
         });
@@ -228,32 +227,31 @@ public class AudioSwitchManager {
 
     public void enableSpeakerphone(boolean enable) {
         updatePreferredDeviceList(enable);
-        selectAudioOutput(AudioDevice.Speakerphone.class);
-        // if (enable) {
-        //     selectAudioOutput(AudioDevice.Speakerphone.class);
-        // } else {
-        //     List<AudioDevice> devices = availableAudioDevices();
-        //     AudioDevice audioDevice = null;
-        //     for (AudioDevice device : devices) {
-        //         if (device.getClass().equals(AudioDevice.BluetoothHeadset.class)) {
-        //             audioDevice = device;
-        //             break;
-        //         } else if (device.getClass().equals(AudioDevice.WiredHeadset.class)) {
-        //             audioDevice = device;
-        //             break;
-        //         } else if (device.getClass().equals(AudioDevice.Earpiece.class)) {
-        //             audioDevice = device;
-        //             break;
-        //         }
-        //     }
-        //     if (audioDevice != null) {
-        //         selectAudioOutput(audioDevice.getClass());
-        //     } else {
-        //         handler.post(() -> {
-        //             Objects.requireNonNull(audioSwitch).selectDevice(null);
-        //         });
-        //     }
-        // }
+        if (enable) {
+            selectAudioOutput(AudioDevice.Speakerphone.class);
+        } else {
+            List<AudioDevice> devices = availableAudioDevices();
+            AudioDevice audioDevice = null;
+            for (AudioDevice device : devices) {
+                if (device.getClass().equals(AudioDevice.BluetoothHeadset.class)) {
+                    audioDevice = device;
+                    break;
+                } else if (device.getClass().equals(AudioDevice.WiredHeadset.class)) {
+                    audioDevice = device;
+                    break;
+                } else if (device.getClass().equals(AudioDevice.Earpiece.class)) {
+                    audioDevice = device;
+                    break;
+                }
+            }
+            if (audioDevice != null) {
+                selectAudioOutput(audioDevice.getClass());
+            } else {
+                handler.post(() -> {
+                    Objects.requireNonNull(audioSwitch).selectDevice(null);
+                });
+            }
+        }
     }
 
     public void enableSpeakerButPreferBluetooth() {
