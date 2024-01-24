@@ -210,7 +210,7 @@ public class AudioSwitchManager {
     }
 
     private void updatePreferredDeviceList(boolean speakerOn) {
-        // preferredDeviceList = new ArrayList<>();
+        preferredDeviceList = new ArrayList<>();
         // preferredDeviceList.add(AudioDevice.BluetoothHeadset.class);
         // preferredDeviceList.add(AudioDevice.WiredHeadset.class);
         preferredDeviceList.add(AudioDevice.Speakerphone.class);
